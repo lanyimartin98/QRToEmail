@@ -1,15 +1,5 @@
 <script>
-	import { goto } from '$app/navigation';
 	import { Button } from '$lib/components/ui/button';
-	import { onMount } from 'svelte';
-
-	export let data;
-
-	onMount(() => {
-		if (data.session) {
-			goto('/dashboard');
-		}
-	});
 </script>
 
 <section>
