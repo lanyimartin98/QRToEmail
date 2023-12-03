@@ -11,7 +11,6 @@
 
 	import { goto, invalidate } from '$app/navigation';
 	import { onMount } from 'svelte';
-	import { redirect } from '@sveltejs/kit';
 
 	export let data;
 

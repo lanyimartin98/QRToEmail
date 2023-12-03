@@ -9,6 +9,7 @@ declare global {
 		}
 		interface PageData {
 			session: Session | null
+			form:any|null
 		  }
 		// interface Platform {}
 	}

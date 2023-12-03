@@ -2,8 +2,11 @@
 	import * as Tabs from '$lib/components/ui/tabs';
 	import Login from '$lib/components/custom/login.svelte';
 	import Register from '$lib/components/custom/register.svelte';
+	import type { PageData } from '../$types';
+	import { superForm } from 'sveltekit-superforms/client';
+	import { onMount } from 'svelte';
 
-	export let data;
+	export let data: PageData;
 	let { supabase } = data;
 </script>
 
@@ -13,7 +16,7 @@
 			<Tabs.Trigger value="login">Login</Tabs.Trigger>
 			<Tabs.Trigger value="register">Register</Tabs.Trigger>
 		</Tabs.List>
-		<Tabs.Content value="login"><Login {supabase} /></Tabs.Content>
+		<Tabs.Content value="login"><Login data={data.loginForm} /></Tabs.Content>
 		<Tabs.Content value="register"><Register {supabase} /></Tabs.Content>
 	</Tabs.Root>
 </section>
