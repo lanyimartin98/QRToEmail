@@ -28,13 +28,6 @@
 
 		return () => subscription.unsubscribe();
 	});
-
-	const handleSignOut = async () => {
-		const { error } = await supabase.auth.signOut();
-		if (error === null) {
-			goto('/');
-		}
-	};
 </script>
 
 <ModeWatcher />
@@ -55,7 +48,9 @@
 			</DropdownMenu.Content>
 		</DropdownMenu.Root>
 		{#if session}
-			<Button variant="ghost" on:click={handleSignOut}><LogOut /></Button>
+			<form method="POST" action="/auth/logout">
+				<Button variant="ghost" type="submit"><LogOut /></Button>
+			</form>
 		{:else}
 			<Button href="/auth" variant="ghost"><LogIn /></Button>
 		{/if}

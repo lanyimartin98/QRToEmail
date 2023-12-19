@@ -17,6 +17,6 @@
 			<Tabs.Trigger value="register">Register</Tabs.Trigger>
 		</Tabs.List>
 		<Tabs.Content value="login"><Login data={data.loginForm} /></Tabs.Content>
-		<Tabs.Content value="register"><Register {supabase} /></Tabs.Content>
+		<Tabs.Content value="register"><Register data={data.registerForm} /></Tabs.Content>
 	</Tabs.Root>
 </section>

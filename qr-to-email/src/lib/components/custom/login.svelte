@@ -3,7 +3,7 @@
 	import { Input } from '$lib/components/ui/input';
 	import { Label } from '$lib/components/ui/label';
 	import { Button } from '$lib/components/ui/button';
-	import type { SuperValidated, Validators } from 'sveltekit-superforms';
+	import type { SuperValidated } from 'sveltekit-superforms';
 	import { superForm } from 'sveltekit-superforms/client';
 	import { loginSchema } from '$lib/schemas';
 
@@ -30,7 +30,7 @@
 				<p class="text-sm text-muted-foreground">{$errors.password}</p>
 			{/if}
 
-			<Button type="submit">Login</Button>
+			<Button type="submit" class="m-4">Login</Button>
 		</Card.Content>
 	</Card.Root>
 </form>

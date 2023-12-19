@@ -1,11 +1,12 @@
 import { AuthApiError } from '@supabase/supabase-js';
 import { fail, redirect } from '@sveltejs/kit';
 import { setError, superValidate } from 'sveltekit-superforms/server';
-import { loginSchema } from '$lib/schemas.js';
+import { loginSchema,registerSchema } from '$lib/schemas.js';
 
-export const load = (async () => {
+export const load = (async ({locals}) => {
     const loginForm = await superValidate(loginSchema);
-    return { loginForm };
+    const registerForm= await superValidate(registerSchema);
+    return { loginForm,registerForm };
   });
 
 export const actions = {
@@ -31,7 +32,26 @@ export const actions = {
 
             throw redirect(303,'/');
 	},
-	register: async (event) => {
-		
-	}
-};
+	register: async ({ request, locals: { supabase },url }) => {
+    const registerForm = await superValidate(request, registerSchema);
+    const email = registerForm.data.email;
+    const password = registerForm.data.password;
+    const { error } = await supabase.auth.signUp({
+			email,
+			password,
+			options: {
+				emailRedirectTo: `${url.hostname}/auth/callback`
+			}
+		});
+
+    if (!registerForm.valid) {
+        return fail(400, { registerForm });
+      }
+
+    if(error){
+        return setError(registerForm,'passwordAgain','Internal server error! Please try again later!');
+    }
+
+    throw redirect(303,'/');
+  }
+}

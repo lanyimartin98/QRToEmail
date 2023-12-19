@@ -4,12 +4,6 @@
 	import { onMount } from 'svelte';
 
 	export let data;
-
-	onMount(() => {
-		if (data.session) {
-			goto('/dashboard');
-		}
-	});
 </script>
 
 <section>
