@@ -1,24 +1,25 @@
 import { queueSchema } from "$lib/schemas.js";
-import { redirect } from "@sveltejs/kit";
-import { setError, superValidate } from "sveltekit-superforms/client";
+import { setError, superValidate,setMessage } from "sveltekit-superforms/client";
 
 export const load = (async ({locals}) => {
+    const { data } = await locals.supabase.from("emailQueue").select();
     const queueForm = await superValidate(queueSchema);
-    return { queueForm };
+    return { queueForm, queue: data ?? [] };
   });
 
 export const actions = {
     appendToQueue: async ({ request, locals: { supabase } }) => {
-        const queueForm = await superValidate(request, queueSchema);
+        const formdata:FormData = await request.formData();
+            const queueForm = await superValidate(formdata, queueSchema);
             const sendTo = queueForm.data.sendTo;
             const message = queueForm.data.message;
-            const formdata:FormData = await request.formData();
-
+            
             const file=formdata.get('attachment');
             if(file instanceof File){
             
-            const attachment= file as File;
-            const fileUpload= await supabase
+            const attachment = file as File;
+            if(attachment.name!=='undefined'){
+            const fileUpload = await supabase
                 .storage
                 .from('Sendables')
                 .upload(attachment.name, attachment, {
@@ -27,20 +28,21 @@ export const actions = {
                 })
 
             if(fileUpload.error){
-                return setError(queueForm,'Error happened during the upload! Please try again later');
+                return setError(queueForm,"attachment",'Internal server error! Please try again later!');
             }
+        }
             
-            const insertion =await supabase.default.from('emailQueue').insert([{
-                sento:sendTo,
+            const insertion =await supabase.from('emailQueue').insert([{
+                sendTo:sendTo,
                 message:message,
-                attachment:attachment.name
+                attachment:(attachment.name==='undefined')?null:attachment.name,
+                status:0
             }])
 
             if(insertion.error){
-                return setError(queueForm,'Error happened during the insertion! Please try again later');
+                return setError(queueForm,"attachment",'Internal server error! Please try again later!');
             }
-
-            throw redirect(303,'/');
+        return setMessage(queueForm,'success');
     }
 }
 }

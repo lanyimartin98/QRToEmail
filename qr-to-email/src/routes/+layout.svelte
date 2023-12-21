@@ -33,7 +33,7 @@
 <ModeWatcher />
 <nav class="flex flex-row p-4 align-middle justify-between">
 	<a href={session !== null ? '/dashboard' : '/'}>QR to Email</a>
-	<div>
+	<div class="flex items-center">
 		<DropdownMenu.Root>
 			<DropdownMenu.Trigger><Button variant="ghost"><MoreVertical /></Button></DropdownMenu.Trigger>
 			<DropdownMenu.Content>

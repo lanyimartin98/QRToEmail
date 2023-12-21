@@ -2,7 +2,6 @@
 	import * as DropdownMenu from '$lib/components/ui/dropdown-menu';
 	import { Button } from '$lib/components/ui/button';
 	import { MoreHorizontal } from 'lucide-svelte';
-	export let id: string;
 </script>
 
 <DropdownMenu.Root>

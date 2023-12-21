@@ -1,14 +1,18 @@
 <script lang="ts">
-	import { goto } from '$app/navigation';
-	import { onMount } from 'svelte';
 	import DataTable from '$lib/components/custom/dataTable.svelte';
 	import AppendToQueue from '$lib/components/custom/crud/appendToQueue.svelte';
-	import Button from '$lib/components/ui/button/button.svelte';
-
+	import { invalidateAll } from '$app/navigation';
 	export let data;
+	let invalidation: boolean = false;
+
+	$: if (invalidation) {
+		console.log('works');
+	}
 </script>
 
 <section class="flex flex-col text-right">
-	<DataTable data={data.queue} />
-	<div><AppendToQueue data={data.queueForm} /></div>
+	{#if data.queue}
+		<DataTable data={data.queue} />
+	{/if}
+	<div><AppendToQueue data={data.queueForm} bind:invalidation /></div>
 </section>
