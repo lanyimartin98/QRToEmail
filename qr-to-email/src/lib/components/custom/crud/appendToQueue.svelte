@@ -19,7 +19,7 @@
 
 	$: if ($message === 'success') {
 		onOpenChange();
-		invalidation = true;
+		invalidation = !invalidation;
 	}
 
 	const { form, errors, enhance, message } = superForm(data, { validators: queueSchema });

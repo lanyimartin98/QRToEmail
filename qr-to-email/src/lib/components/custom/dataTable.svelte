@@ -7,6 +7,8 @@
 	import DatatableAction from './dataTable/datatableAction.svelte';
 
 	export let data;
+	export let invalidation: boolean;
+	export let form: any;
 
 	const table = createTable(readable(data));
 
@@ -31,7 +33,7 @@
 			accessor: ({ id }) => id,
 			header: '',
 			cell: ({ value }) => {
-				return createRender(DatatableAction, { id: value });
+				return createRender(DatatableAction, { id: value, invalidation: invalidation, form: form });
 			}
 		})
 	]);

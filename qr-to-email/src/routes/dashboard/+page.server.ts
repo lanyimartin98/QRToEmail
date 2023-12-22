@@ -1,4 +1,5 @@
 import { queueSchema } from "$lib/schemas.js";
+import { fail } from "@sveltejs/kit";
 import { setError, superValidate,setMessage } from "sveltekit-superforms/client";
 
 export const load = (async ({locals}) => {
@@ -9,7 +10,7 @@ export const load = (async ({locals}) => {
 
 export const actions = {
     appendToQueue: async ({ request, locals: { supabase } }) => {
-        const formdata:FormData = await request.formData();
+            const formdata:FormData = await request.formData();
             const queueForm = await superValidate(formdata, queueSchema);
             const sendTo = queueForm.data.sendTo;
             const message = queueForm.data.message;
@@ -44,5 +45,19 @@ export const actions = {
             }
         return setMessage(queueForm,'success');
     }
-}
+ },
+    removeFromQueue:async({ url, locals: { supabase } })=>{
+            const id=url.searchParams.get('id');
+            if(!id){
+                return fail(400,{message:"ID is not supplied"});
+            }
+
+            const {error} = await supabase.from('emailQueue').delete().eq('id',id);
+
+            if(error){
+                return fail(400,{message:"Unexpected error happend during the deletion!"});
+            }
+
+            return {message:'success'}
+    }
 }
